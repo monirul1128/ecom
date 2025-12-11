@@ -16,11 +16,15 @@ class GoogleTagManagerMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if ($gtmId = setting('gtm_id')) {
-            config(['googletagmanager.id' => $gtmId]);
-            GoogleTagManagerFacade::setId(config('googletagmanager.id'));
-            GoogleTagManagerFacade::enable();
-        } else {
+        try {
+            if ($gtmId = setting('gtm_id')) {
+                config(['googletagmanager.id' => $gtmId]);
+                GoogleTagManagerFacade::setId(config('googletagmanager.id'));
+                GoogleTagManagerFacade::enable();
+            } else {
+                GoogleTagManagerFacade::disable();
+            }
+        } catch (\Exception $e) {
             GoogleTagManagerFacade::disable();
         }
 
@@ -33,3 +37,4 @@ class GoogleTagManagerMiddleware
         return $next($request);
     }
 }
+
