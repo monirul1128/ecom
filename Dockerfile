@@ -1,8 +1,8 @@
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 RUN apt-get update && apt-get install -y \
-    libzip-dev unzip libpng-dev libonig-dev libxml2-dev git curl zip \
- && docker-php-ext-install pdo pdo_mysql mbstring bcmath gd sockets || true
+    libzip-dev unzip libpng-dev libonig-dev libxml2-dev libicu-dev git curl zip \
+ && docker-php-ext-install pdo pdo_mysql mbstring bcmath gd sockets intl zip || true
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -10,7 +10,7 @@ WORKDIR /var/www/html
 
 COPY . /var/www/html
 
-RUN cd /var/www/html && composer install --no-dev --optimize-autoloader --no-interaction 2>&1
+RUN cd /var/www/html && composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-req=php-64bit 2>&1
 
 RUN a2enmod rewrite
 RUN printf "ServerName localhost\n" > /etc/apache2/conf-available/servername.conf \
