@@ -29,7 +29,6 @@ use App\Http\Controllers\Admin\ShipmentReportController;
 use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\TransactionController;
-use Hotash\LaravelMultiUi\Facades\MultiUi;
 use Illuminate\Support\Facades\Route;
 
 // Controller Level Namespace
@@ -37,19 +36,21 @@ Route::group(['as' => 'admin.'], function (): void {
 
     Route::namespace('App\\Http\\Controllers\\Admin')->group(function (): void {
         // Admin Level Namespace & No Prefix
-        MultiUi::routes([
-            'register' => false,
-            'URLs' => [
-                'login' => 'getpass',
-                'register' => 'create-admin-account',
-                'reset/password' => 'reset-pass',
-                'logout' => 'getout',
-            ],
-            'prefix' => [
-                'URL' => 'admin-',
-                'except' => ['login', 'register'],
-            ],
-        ]);
+        if (class_exists(\Hotash\LaravelMultiUi\Facades\MultiUi::class)) {
+            \Hotash\LaravelMultiUi\Facades\MultiUi::routes([
+                'register' => false,
+                'URLs' => [
+                    'login' => 'getpass',
+                    'register' => 'create-admin-account',
+                    'reset/password' => 'reset-pass',
+                    'logout' => 'getout',
+                ],
+                'prefix' => [
+                    'URL' => 'admin-',
+                    'except' => ['login', 'register'],
+                ],
+            ]);
+        }
         // ...
         // ...
     });
