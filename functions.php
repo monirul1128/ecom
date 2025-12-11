@@ -145,7 +145,11 @@ if (! function_exists('setting')) {
     function setting($name, $default = null)
     {
         return cacheMemo()->rememberForever('settings:'.$name, function () use ($name, $default) {
-            return optional(Setting::whereName($name)->first())->value ?? $default;
+            try {
+                return optional(Setting::whereName($name)->first())->value ?? $default;
+            } catch (\Exception $e) {
+                return $default;
+            }
         });
     }
 }
