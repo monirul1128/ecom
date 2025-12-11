@@ -14,7 +14,6 @@ use App\Http\Controllers\ResellerController;
 use App\Http\Middleware\EnsureResellerIsVerified;
 use App\Http\Middleware\GoogleTagManagerMiddleware;
 use Hotash\FacebookPixel\MetaPixelMiddleware;
-use Hotash\LaravelMultiUi\Facades\MultiUi;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -32,19 +31,21 @@ Route::middleware([GoogleTagManagerMiddleware::class, MetaPixelMiddleware::class
 
         Route::namespace('App\\Http\\Controllers\\User')->group(function (): void {
             // Admin Level Namespace & No Prefix
-            MultiUi::routes([
-                'register' => true,
-                'URLs' => [
-                    'login' => 'login',
-                    'register' => 'register',
-                    'reset/password' => 'reset-pass',
-                    'logout' => 'logout',
-                ],
-                'prefix' => [
-                    'URL' => 'user-',
-                    'except' => ['login', 'register'],
-                ],
-            ]);
+            if (class_exists(\Hotash\LaravelMultiUi\Facades\MultiUi::class)) {
+                \Hotash\LaravelMultiUi\Facades\MultiUi::routes([
+                    'register' => true,
+                    'URLs' => [
+                        'login' => 'login',
+                        'register' => 'register',
+                        'reset/password' => 'reset-pass',
+                        'logout' => 'logout',
+                    ],
+                    'prefix' => [
+                        'URL' => 'user-',
+                        'except' => ['login', 'register'],
+                    ],
+                ]);
+            }
             // ...
             // ...
             Route::post('resend-otp', 'Auth\LoginController@resendOTP')->name('resend-otp');
