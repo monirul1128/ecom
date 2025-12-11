@@ -13,7 +13,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ResellerController;
 use App\Http\Middleware\EnsureResellerIsVerified;
 use App\Http\Middleware\GoogleTagManagerMiddleware;
-use Hotash\FacebookPixel\MetaPixelMiddleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -26,7 +25,12 @@ use Illuminate\Support\Facades\Session;
 //     return redirect()->back();
 // })->name('lang');
 
-Route::middleware([GoogleTagManagerMiddleware::class, MetaPixelMiddleware::class])->group(function (): void {
+$middlewares = [GoogleTagManagerMiddleware::class];
+if (class_exists(\Hotash\FacebookPixel\MetaPixelMiddleware::class)) {
+    $middlewares[] = \Hotash\FacebookPixel\MetaPixelMiddleware::class;
+}
+
+Route::middleware($middlewares)->group(function (): void {
     Route::group(['as' => 'user.'], function (): void {
 
         Route::namespace('App\\Http\\Controllers\\User')->group(function (): void {
