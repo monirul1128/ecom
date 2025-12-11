@@ -13,6 +13,8 @@ COPY . /var/www/html
 RUN composer install --no-dev --optimize-autoloader --no-interaction || true
 
 RUN a2enmod rewrite
+RUN printf "ServerName localhost\n" > /etc/apache2/conf-available/servername.conf \
+    && a2enconf servername || true
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!DocumentRoot /var/www/html!DocumentRoot ${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
     && sed -ri -e 's!<Directory /var/www/html>!<Directory ${APACHE_DOCUMENT_ROOT}>!g' /etc/apache2/apache2.conf
