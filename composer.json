@@ -105,15 +105,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "path",
-            "url": "packages/laravel-facebook-pixel"
-        },
-        {
-            "type": "path",
-            "url": "packages/laravel-multi-ui"
-        }
-    ]
+    "prefer-stable": true
 }
