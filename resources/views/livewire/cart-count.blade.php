@@ -1,0 +1,1 @@
+<span class="indicator__value cart-count">{{ cart()->count() }}</span>
