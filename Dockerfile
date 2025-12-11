@@ -12,7 +12,7 @@ COPY . /var/www/html
 
 RUN cd /var/www/html && composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-req=php-64bit 2>&1
 
-RUN a2enmod rewrite
+RUN a2enmod rewrite headers expires
 RUN printf "ServerName localhost\n" > /etc/apache2/conf-available/servername.conf \
     && a2enconf servername || true
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
